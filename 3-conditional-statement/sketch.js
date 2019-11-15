@@ -101,18 +101,48 @@ class Runner{
 	}
 
 	race(){}
-	myInputEvent(){
-		workout = inp.value()
+
+	AnT(){
+		rect(200,200,500,400)
+		// let RecoveryRun = createButton('15 minutes');
+		// RecoveryRun.position(450,350)
+		// RecoveryRun.mousePressed(this.RecoveryRun)
+
+		// let LongRun = createButton('18 minutes');
+		// LongRun.position(450,380)
+		// LongRun.mousePressed(this.LongRun)
 	}
+
+	RecoveryRun(){
+
+	}
+	LongRun(){}
+	AT(){}
+	Interval(){}
 	newDay(){
 		if(this.injured == false){
 			rect(200,200,500,400)
-			text("Choose your type of workout",300,300)
-			let inp = createInput('');
-			inp.position(300,500);
-			let button = createButton('submit');
-			button.position(450,500)
-			button.mousePressed(this.myInputEvent)
+			text("Choose your type of workout:",300,300)
+
+			let RecoveryRun = createButton('Recovery Run');
+			RecoveryRun.position(450,350)
+			RecoveryRun.mousePressed(this.RecoveryRun)
+
+			let LongRun = createButton('Long Run');
+			LongRun.position(450,380)
+			LongRun.mousePressed(this.LongRun)
+
+			let AnT = createButton('AnT');
+			AnT.position(450,410)
+			AnT.mousePressed(this.AnT)
+
+			let AT = createButton('AT');
+			AT.position(450,440)
+			AT.mousePressed(this.AT)
+
+			let Interval = createButton('Interval');
+			Interval.position(450,440)
+			Interval.mousePressed(this.Interval)
 		}
 		if(this.injured == true){
 
@@ -124,12 +154,12 @@ class Runner{
 
 function setup(){
 	createCanvas(1000,1000)
+	background("teal")
 	me = new Runner(0,0,0,0,1)
+	me.workout()
+	me.newDay()
 }
 
 function draw(){
-	background("teal")
-	// ellipse(100,100,100,100)
-	me.workout()
-	me.newDay()
+
 }
