@@ -6,7 +6,25 @@ function draw(){
 	background("red")
 	ellipse(100,100,100,100)
 }
+workout = [
+	["race","1600m Time Trial"]
+	["Recovery Run",30]
+	["Recovery Run",30]
+	["race","Lake Merced Race"]
+	["Recovery Run",40]
+	["Long Run",80]
+	["REST"]
+	["ANT",15]
+	["REST"]
+	["Recovery Run",30]
+	["race","Lake Merced Race",25]
+	["Recovery Run"30]
+	["Long Run"80]
+	[""]
 
+
+
+]
 class Runner{
 	constructor(fitness,speed,injury,motivation,day){
 		this.fitness = fitness
@@ -24,7 +42,6 @@ class Runner{
 
 	workout(){
 		if (this.summer == true){
-			
 		}
 	}
 
