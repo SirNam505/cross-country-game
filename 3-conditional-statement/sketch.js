@@ -1,29 +1,19 @@
-function setup(){
-	createCanvas(1000,1000)
-	me = new Runner(0,0,0,0,1)
-}
 
-function draw(){
-	background("teal")
-	// ellipse(100,100,100,100)
-	me.workout()
-	me.newDay()
-}
 workout = [
-	["race","1600m Time Trial"]
-	["Recovery Run",30]
-	["Recovery Run",30]
-	["race","Lake Merced Race"]
-	["Recovery Run",40]
-	["Long Run",80]
-	["REST"]
-	["ANT",15]
-	["REST"]
-	["Recovery Run",30]
-	["race","Lake Merced Race",25]
-	["Recovery Run"30]
-	["Long Run"80]
-	[""]
+	["race","1600m Time Trial"],
+	["Recovery Run",30],
+	["Recovery Run",30],
+	["race","Lake Merced Race"],
+	["Recovery Run",40],
+	["Long Run",80],
+	["REST"],
+	["ANT",15],
+	["REST"],
+	["Recovery Run",30],
+	["race","Lake Merced Race",25],
+	["Recovery Run",30],
+	["Long Run",80],
+	[""],
 
 
 
@@ -65,12 +55,18 @@ class Runner{
 	}
 
 	race(){}
-
+	myInputEvent(){
+		workout = inp.value()
+	}
 	newDay(){
 		if(this.injured == false){
 			rect(200,200,500,400)
-			text("Today is " + this.day + ", day " + this.dayNum,300,300)
-			text("Today is " + this.day,300,300)
+			text("Choose your type of workout",300,300)
+			let inp = createInput('');
+			inp.position(300,500);
+			let button = createButton('submit');
+			button.position(450,500)
+			button.mousePressed(this.myInputEvent)
 		}
 		if(this.injured == true){
 
@@ -78,4 +74,16 @@ class Runner{
 	}
 
 	daySummary(){}
+}
+
+function setup(){
+	createCanvas(1000,1000)
+	me = new Runner(0,0,0,0,1)
+}
+
+function draw(){
+	background("teal")
+	// ellipse(100,100,100,100)
+	me.workout()
+	me.newDay()
 }
