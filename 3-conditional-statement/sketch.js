@@ -1,4 +1,14 @@
-
+function clearButtons(){
+	var buttons = document.getElementsByTagName('button');
+	console.log(buttons)
+	if (buttons) {
+	  var num = buttons.length
+	  for (var i = 0; i < num; i++) {
+		console.log(buttons[0])
+		buttons[0].remove()
+	}
+	}
+}
 workout = [
 	["race","1600m Time Trial"],
 	["Recovery Run",30],
@@ -158,15 +168,14 @@ class Runner{
 		text("Day #" + me.dayNum, width/2,height/3.3)
 		textSize(width/60)
 		text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
-		document.getElementById("AT").remove()
-		document.getElementById("LongRun").remove()
-		document.getElementById("RecoveryRun").remove()
-		document.getElementById("AnT").remove()
-		document.getElementById("Interval").remove()
+		clearButtons()
 		let back = createButton('back');
 		back.id("back")
 		back.position(width-width/3,height/4 + 20)
-		back.mousePressed(me.newDay)
+		back.mousePressed(function() {
+			clearButtons()
+			me.newDay()
+		})
 
 		let AnT12 = createButton('12 minutes');
 		AnT12.id("12AnT")
@@ -191,24 +200,12 @@ class Runner{
 		text("Day #" + me.dayNum, width/2,height/3.3)
 		textSize(width/60)
 		text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
-		document.getElementById("AT").remove()
-		document.getElementById("LongRun").remove()
-		document.getElementById("RecoveryRun").remove()
-		document.getElementById("AnT").remove()
-		document.getElementById("Interval").remove()
+		clearButtons()
 		let back = createButton('back');
 		back.id("back")
 		back.position(width-width/3,height/4 + 20)
 		back.mousePressed(function() {
-			var buttons = document.getElementsByTagName('button');
-			console.log(buttons)
-			if (buttons) {
-			  var num = buttons.length
-			  for (var i = 0; i < num; i++) {
-				console.log(buttons[0])
-				buttons[0].remove()
-			}
-			}
+			clearButtons()
 			me.newDay()
 		})
 
@@ -238,15 +235,14 @@ class Runner{
 		text("Day #" + me.dayNum, width/2,height/3.3)
 		textSize(width/60)
 		text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
-		document.getElementById("AT").remove()
-		document.getElementById("LongRun").remove()
-		document.getElementById("RecoveryRun").remove()
-		document.getElementById("AnT").remove()
-		document.getElementById("Interval").remove()
+		clearButtons()
 		let back = createButton('back');
 		back.id("back")
 		back.position(width-width/3,height/4 + 20)
-		back.mousePressed(me.newDay)
+		back.mousePressed(function() {
+			clearButtons()
+			me.newDay()
+		})
 
 		let LongRun50 = createButton('50 minutes');
 		LongRun50.id("LongRun50")
@@ -272,15 +268,14 @@ class Runner{
 		text("Day #" + me.dayNum, width/2,height/3.3)
 		textSize(width/60)
 		text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
-		document.getElementById("AT").remove()
-		document.getElementById("LongRun").remove()
-		document.getElementById("RecoveryRun").remove()
-		document.getElementById("AnT").remove()
-		document.getElementById("Interval").remove()
+		clearButtons()
 		let back = createButton('back');
 		back.id("back")
 		back.position(width-width/3,height/4 + 20)
-		back.mousePressed(me.newDay)
+		back.mousePressed(function() {
+			clearButtons()
+			me.newDay()
+		})
 		
 		let AT20 = createButton('20 minutes');
 		AT20.id("AT20")
@@ -303,15 +298,14 @@ class Runner{
 		text("Day #" + me.dayNum, width/2,height/3.3)
 		textSize(width/60)
 		text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
-		document.getElementById("AT").remove()
-		document.getElementById("LongRun").remove()
-		document.getElementById("RecoveryRun").remove()
-		document.getElementById("AnT").remove()
-		document.getElementById("Interval").remove()
+		clearButtons()
 		let back = createButton('back');
 		back.id("back")
 		back.position(width-width/3,height/4 + 20)
-		back.mousePressed(me.newDay)
+		back.mousePressed(function() {
+			clearButtons()
+			me.newDay()
+		})
 		
 		let Interval200 = createButton('200m repeats');
 		Interval200.id("Interval200")
