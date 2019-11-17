@@ -286,7 +286,7 @@ class Runner{
 		let back = createButton('back');
 		back.id("back")
 		back.position(width-width/3,height/4 + 20)
-		back.mousePressed(me.newDay())
+		back.mousePressed(me.newDay)
 		
 		let Interval200 = createButton('200m repeats');
 		Interval200.id("Interval200")
