@@ -125,8 +125,21 @@ class Runner{
 
 	race(){}
 
-	Return(type,length){
-		if (type == "RecoveryRun"){}
+	summary(type,length){
+		rect(width/2-width/4,height/2-height/4,width/2,height/2)
+		textSize(width/25)
+		text("Day #" + me.dayNum, width/2,height/3.3)
+		textSize(width/60)
+		text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
+
+		if (type == "RecoveryRun"){
+			document.getElementById("RecoveryRun30").remove()
+			document.getElementById("RecoveryRun40").remove()
+			document.getElementById("RecoveryRun50").remove()
+			document.getElementById("RecoveryRun60").remove()
+			textSize(width/50)
+			text("You ran a " + length + " minute recovery run.",width/3,height/2.5)
+		}
 		if (type == "LongRun"){}
 		if (type == "AnT"){}
 		if (type == "AT"){}
@@ -134,7 +147,7 @@ class Runner{
 		if (type == "400m"){}
 		if (type == "800m"){}
 		if (type == "1600m"){}
-		if (type == "1600m"){}
+		if (type == "300mHills"){}
 	}
 
 	AnTre(){
@@ -186,11 +199,23 @@ class Runner{
 		let back = createButton('back');
 		back.id("back")
 		back.position(width-width/3,height/4 + 20)
-		back.mousePressed(me.newDay)
+		back.mousePressed(function() {
+			var buttons = document.getElementsByTagName('button');
+			console.log(buttons)
+			if (buttons) {
+			  var num = buttons.length
+			  for (var i = 0; i < num; i++) {
+				console.log(buttons[0])
+				buttons[0].remove()
+			}
+			}
+			me.newDay()
+		})
 
 		let RecoveryRun30 = createButton('30 minutes');
 		RecoveryRun30.id("RecoveryRun30")
 		RecoveryRun30.position(width/2.9,height/2.2)
+		RecoveryRun30.mousePressed(function() {me.summary("RecoveryRun",30)})
 
 		let RecoveryRun40 = createButton('40 minutes');
 		RecoveryRun40.id("RecoveryRun40")
@@ -311,6 +336,7 @@ class Runner{
 
 	newDay(){
 		if(this.injured == false){
+			
 			rect(width/2-width/4,height/2-height/4,width/2,height/2)
 			textSize(width/50)
 			text("Choose your type of workout:",width/3,height/2.5)
