@@ -126,6 +126,10 @@ function setup(){
 	createCanvas(1000,1000)
 	me = new Runner(0,0,0,0,1)
 }
+pace()
+	let pace = document.getElementById("pace")
+	pace.value -= 10;
+	}
 
 function draw(){
 	background("teal")
