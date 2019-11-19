@@ -277,6 +277,7 @@ class Runner{
 			me.newDay()
 		})
 		
+
 		let AT20 = createButton('20 minutes');
 		AT20.id("AT20")
 		AT20.position(width/2.9,height/2.2)
@@ -306,7 +307,6 @@ class Runner{
 			clearButtons()
 			me.newDay()
 		})
-		
 		let Interval200 = createButton('200m repeats');
 		Interval200.id("Interval200")
 		Interval200.position(width/2.9,height/2.2)
