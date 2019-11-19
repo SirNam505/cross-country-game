@@ -9,6 +9,7 @@ function clearButtons(){
 	}
 	}
 }
+
 workout = [
 	["race","1600m Time Trial"],
 	["Recovery Run",30],
@@ -82,7 +83,7 @@ class Runner{
 		this.motivation = motivation
 		this.dayNum = day
 		this.day
-		this.milePace = 8-this.fitness*this.speed
+		this.milePace = 6-this.fitness*this.speed
 		if (this.dayNum == 1){
 			this.day = "Monday"
 		}else if (this.dayNum == 2){
@@ -143,12 +144,12 @@ class Runner{
 		text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
 
 		if (type == "RecoveryRun"){
-			document.getElementById("RecoveryRun30").remove()
-			document.getElementById("RecoveryRun40").remove()
-			document.getElementById("RecoveryRun50").remove()
-			document.getElementById("RecoveryRun60").remove()
+			clearButtons()
+			let pace = (me.milePace + 2*random(1,1.25)).toFixed(2)
+			let miles = (length/pace).toFixed(2)
 			textSize(width/50)
-			text("You ran a " + length + " minute recovery run.",width/3,height/2.5)
+			text("You ran " + miles + " miles at " + pace + " per mile pace.",width/3,height/2.5)
+
 		}
 		if (type == "LongRun"){}
 		if (type == "AnT"){}
@@ -377,7 +378,7 @@ class Runner{
 }
 
 function setup(){
-	createCanvas(1000,800)
+	createCanvas(1000,600)
 	background("teal")
 	me = new Runner(0,0,0,0,1)
 	me.workout()
