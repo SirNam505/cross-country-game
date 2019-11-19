@@ -190,7 +190,7 @@ class Runner{
 		AnT18.position(width/2.9,height/2.2 +height*0.1)
 	}
 
-	
+
 
 	RecoveryRunre(){
 		rect(width/2-width/4,height/2-height/4,width/2,height/2)
@@ -276,7 +276,6 @@ class Runner{
 			clearButtons()
 			me.newDay()
 		})
-		
 
 		let AT20 = createButton('20 minutes');
 		AT20.id("AT20")
@@ -307,6 +306,7 @@ class Runner{
 			clearButtons()
 			me.newDay()
 		})
+
 		let Interval200 = createButton('200m repeats');
 		Interval200.id("Interval200")
 		Interval200.position(width/2.9,height/2.2)
@@ -330,7 +330,7 @@ class Runner{
 
 	newDay(){
 		if(this.injured == false){
-			
+
 			rect(width/2-width/4,height/2-height/4,width/2,height/2)
 			textSize(width/50)
 			text("Choose your type of workout:",width/3,height/2.5)
