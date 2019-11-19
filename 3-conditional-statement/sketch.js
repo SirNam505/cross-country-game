@@ -81,9 +81,18 @@ class Runner{
 		this.speed = speed
 		this.injury = injury
 		this.motivation = motivation
-		this.dayNum = day
-		this.day
-		this.milePace = 6-this.fitness*this.speed
+		this.dayNum = 1
+		this.milePace = 6-(this.fitness*this.speed)/100
+		this.injured = false
+		this.summer = true
+		if(this.dayNum>63){
+			this.summer = false
+		}
+	}
+	setPaces(){
+		this.milePace = 6-(this.fitness*this.speed)/50
+	}
+	setDates(){
 		if (this.dayNum == 1){
 			this.day = "Monday"
 		}else if (this.dayNum == 2){
@@ -120,19 +129,8 @@ class Runner{
 			this.month = "October"
 			this.date = this.dateNum - 153
 		}
-		this.injured = false
-		this.summer = true
-		if(this.dayNum>63){
-			this.summer = false
-		}
 	}
 
-	workout(){
-		if (this.summer == true){
-			textSize(20)
-			text("Fitness: " + this.fitness + "  Speed: " + this.speed + "  Injury: " + this.injury + "  Motivation: " + this.motivation,10,20)
-		}
-	}
 
 	race(){}
 
@@ -142,13 +140,25 @@ class Runner{
 		text("Day #" + me.dayNum, width/2,height/3.3)
 		textSize(width/60)
 		text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
-
+		
 		if (type == "RecoveryRun"){
 			clearButtons()
-			let pace = (me.milePace + 2*random(1,1.25)).toFixed(2)
-			let miles = (length/pace).toFixed(2)
+			let pace = me.milePace + 1.75
+			let minutes = floor(pace)
+			let seconds = ((pace-minutes)*60).toFixed(1)
+			if (seconds<10){seconds = "0" + String(seconds)}
+			let miles = float((length/pace).toFixed(2))
 			textSize(width/50)
-			text("You ran " + miles + " miles at " + pace + " per mile pace.",width/3,height/2.5)
+			text("You ran " + miles + " miles at " + minutes + ":" +seconds + " per mile pace.",width/3,height/2.5)
+			text("Fitness + " + (miles/10).toFixed(3),width/3,height/2)
+			me.fitness = float((me.fitness+miles/10).toFixed(3))
+			let next = createButton('Next >>');
+			next.id("next")
+			next.position(width/2.9,height/1.8)
+			next.mousePressed(function() {
+				me.dayNum+=1
+				me.newDay()
+			})
 
 		}
 		if (type == "LongRun"){}
@@ -218,14 +228,20 @@ class Runner{
 		let RecoveryRun40 = createButton('40 minutes');
 		RecoveryRun40.id("RecoveryRun40")
 		RecoveryRun40.position(width/2.9,height/2.2 + height*0.05)
+		RecoveryRun40.mousePressed(function() {me.summary("RecoveryRun",40)})
+
 
 		let RecoveryRun50 = createButton('50 minutes');
 		RecoveryRun50.id("RecoveryRun50")
 		RecoveryRun50.position(width/2.9,height/2.2 +height*0.1)
+		RecoveryRun50.mousePressed(function() {me.summary("RecoveryRun",50)})
+
 
 		let RecoveryRun60 = createButton('60 minutes');
 		RecoveryRun60.id("RecoveryRun60")
 		RecoveryRun60.position(width/2.9,height/2.2 +height*0.15)
+		RecoveryRun60.mousePressed(function() {me.summary("RecoveryRun",60)})
+
 	}
 
 	LongRunre(){
@@ -331,7 +347,12 @@ class Runner{
 
 	newDay(){
 		if(this.injured == false){
-
+			background("teal")
+			clearButtons()
+			this.setDates()
+			this.setPaces()
+			textSize(20)
+			text("Fitness: " + this.fitness + "  Speed: " + this.speed + "  Injury: " + this.injury + "  Motivation: " + this.motivation,10,20)
 			rect(width/2-width/4,height/2-height/4,width/2,height/2)
 			textSize(width/50)
 			text("Choose your type of workout:",width/3,height/2.5)
@@ -378,25 +399,11 @@ class Runner{
 }
 
 function setup(){
-	createCanvas(1000,600)
+	createCanvas(1000,700)
 	background("teal")
-	me = new Runner(0,0,0,0,1)
-	me.workout()
+	me = new Runner(1,1,1,1,1)
 	me.newDay()
 }
-pace()
-	let pace = document.getElementById("pace")
-	pace.value -= 10;
-	}
 
 function draw(){
-<<<<<<< HEAD
-	background("teal")
-	// ellipse(100,100,100,100)
-	me.workout()
-	me.newDay()
 }
-=======
-
-}
->>>>>>> 90ccf11cef001cf1c2df0a9106aef8de631c88fd
