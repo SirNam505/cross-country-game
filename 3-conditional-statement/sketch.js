@@ -93,19 +93,19 @@ class Runner{
 		this.milePace = 6-(this.fitness*this.speed)/50
 	}
 	setDates(){
-		if (this.dayNum == 1){
+		if (this.dayNum % 7 == 1){
 			this.day = "Monday"
-		}else if (this.dayNum == 2){
+		}else if (this.dayNum % 7 == 2){
 			this.day = "Tuesday"
-		}else if (this.dayNum == 3){
+		}else if (this.dayNum % 7 == 3){
 			this.day = "Wednesday"
-		}else if (this.dayNum == 4){
+		}else if (this.dayNum % 7 == 4){
 			this.day = "Thursday"
-		}else if (this.dayNum == 5){
+		}else if (this.dayNum % 7 == 5){
 			this.day = "Friday"
-		}else if (this.dayNum == 6){
+		}else if (this.dayNum % 7 == 6){
 			this.day = "Saturday"
-		}else if (this.dayNum == 1){
+		}else if (this.dayNum % 7 == 0){
 			this.day = "Sunday"
 		}
 
