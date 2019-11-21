@@ -154,7 +154,7 @@ class Runner{
 			me.fitness = float((me.fitness+miles/10).toFixed(3))
 			let next = createButton('Next >>');
 			next.id("next")
-			next.position(width/2.9,height/1.8)
+			next.position(width/2.9,height/1.5)
 			next.mousePressed(function() {
 				me.dayNum+=1
 				me.newDay()
@@ -174,7 +174,7 @@ class Runner{
 			me.fitness = float((me.fitness+miles/10).toFixed(3))
 			let next = createButton('Next >>');
 			next.id("next")
-			next.position(width/2.9,height/1.8)
+			next.position(width/2.9,height/1.5)
 			next.mousePressed(function() {
 				me.dayNum+=1
 				me.newDay()
@@ -196,7 +196,7 @@ class Runner{
 			me.speed = float((me.speed+0.5).toFixed(3))
 			let next = createButton('Next >>');
 			next.id("next")
-			next.position(width/2.9,height/1.8)
+			next.position(width/2.9,height/1.5)
 			next.mousePressed(function() {
 				me.dayNum+=1
 				me.newDay()
@@ -217,17 +217,133 @@ class Runner{
 			me.speed = float((me.speed+0.45).toFixed(3))
 			let next = createButton('Next >>');
 			next.id("next")
-			next.position(width/2.9,height/1.8)
+			next.position(width/2.9,height/1.5)
 			next.mousePressed(function() {
 				me.dayNum+=1
 				me.newDay()
 			})
 		}
-		if (type == "200m"){}
-		if (type == "400m"){}
-		if (type == "800m"){}
-		if (type == "1600m"){}
-		if (type == "300mHills"){}
+		if (type == "200m"){
+			clearButtons()
+			let pace = me.milePace - random(0.2,0.4)
+			let minutes = floor(pace)
+			let seconds = ((pace-minutes)*60).toFixed(1)
+			if (seconds<10){seconds = "0" + String(seconds)}
+			let per200m = float((pace/8).toFixed(2))
+			let per200mminutes = floor(per200m)
+			let per200mseconds = ((per200m-per200mminutes)*60).toFixed(1)
+			if (per200mseconds<10){per200mseconds = "0" + String(per200mseconds)}
+			textSize(width/50)
+			text("You ran 20x200m repeats at " + minutes + ":" +seconds + " per mile pace.",width/3.5,height/2.5)
+			text(per200mminutes + ":" + per200mseconds + " per 200m",width/3.5,height/2.2)
+			text("Speed + " + 0.8,width/3,height/1.85)
+			me.speed = float((me.speed+0.8).toFixed(3))
+			let next = createButton('Next >>');
+			next.id("next")
+			next.position(width/2.9,height/1.5)
+			next.mousePressed(function() {
+				me.dayNum+=1
+				me.newDay()
+			})
+		}
+		if (type == "400m"){
+			clearButtons()
+			let pace = me.milePace + random(0.2,0.4)
+			let minutes = floor(pace)
+			let seconds = ((pace-minutes)*60).toFixed(1)
+			if (seconds<10){seconds = "0" + String(seconds)}
+			let per400m = float((pace/4).toFixed(2))
+			let per400mminutes = floor(per400m)
+			let per400mseconds = ((per400m-per400mminutes)*60).toFixed(1)
+			if (per400mseconds<10){per400mseconds = "0" + String(per400mseconds)}
+			textSize(width/50)
+			text("You ran 12x400m repeats at " + minutes + ":" +seconds + " per mile pace.",width/3.5,height/2.5)
+			text(per400mminutes + ":" + per400mseconds + " per 400m",width/3.5,height/2.2)
+			text("Speed + " + 0.8,width/3,height/1.85)
+			me.speed = float((me.speed+0.8).toFixed(3))
+			let next = createButton('Next >>');
+			next.id("next")
+			next.position(width/2.9,height/1.5)
+			next.mousePressed(function() {
+				me.dayNum+=1
+				me.newDay()
+			})
+		}
+		if (type == "800m"){
+			clearButtons()
+			let pace = me.milePace + random(0.6,0.8)
+			let minutes = floor(pace)
+			let seconds = ((pace-minutes)*60).toFixed(1)
+			if (seconds<10){seconds = "0" + String(seconds)}
+			let per800m = float((pace/2).toFixed(2))
+			let per800mminutes = floor(per800m)
+			let per800mseconds = ((per800m-per800mminutes)*60).toFixed(1)
+			if (per800mseconds<10){per800mseconds = "0" + String(per800mseconds)}
+			textSize(width/50)
+			text("You ran 6x800m repeats at " + minutes + ":" +seconds + " per mile pace.",width/3.5,height/2.5)
+			text(per800mminutes + ":" + per800mseconds + " per 800m",width/3.5,height/2.2)
+			text("Fitness + " + 0.1,width/3,height/2)
+			text("Speed + " + 0.7,width/3,height/1.85)
+			me.fitness = float((me.fitness+0.1).toFixed(3))
+			me.speed = float((me.speed+0.7).toFixed(3))
+			let next = createButton('Next >>');
+			next.id("next")
+			next.position(width/2.9,height/1.5)
+			next.mousePressed(function() {
+				me.dayNum+=1
+				me.newDay()
+			})
+		}
+		if (type == "1600m"){
+			clearButtons()
+			let pace = me.milePace + random(0.6,0.8)
+			let minutes = floor(pace)
+			let seconds = ((pace-minutes)*60).toFixed(1)
+			if (seconds<10){seconds = "0" + String(seconds)}
+			let per1600m = float((pace).toFixed(2))
+			let per1600mminutes = floor(per1600m)
+			let per1600mseconds = ((per1600m-per1600mminutes)*60).toFixed(1)
+			if (per1600mseconds<10){per1600mseconds = "0" + String(per1600mseconds)}
+			textSize(width/50)
+			text("You ran 3x1600m repeats at " + minutes + ":" +seconds + " per mile pace.",width/3.5,height/2.5)
+			text(minutes + ":" + seconds + " per 1600m",width/3.5,height/2.2)
+			text("Fitness + " + 0.2,width/3,height/2)
+			text("Speed + " + 0.6,width/3,height/1.85)
+			me.fitness = float((me.fitness+0.2).toFixed(3))
+			me.speed = float((me.speed+0.6).toFixed(3))
+			let next = createButton('Next >>');
+			next.id("next")
+			next.position(width/2.9,height/1.5)
+			next.mousePressed(function() {
+				me.dayNum+=1
+				me.newDay()
+			})
+		}
+		if (type == "300mHills"){
+			clearButtons()
+			let pace = me.milePace+random(0.9,1.1)
+			let minutes = floor(pace)
+			let seconds = ((pace-minutes)*60).toFixed(1)
+			if (seconds<10){seconds = "0" + String(seconds)}
+			let per300m = float((pace*(3/16)).toFixed(2))
+			let per300mminutes = floor(per300m)
+			let per300mseconds = ((per300m-per300mminutes)*60).toFixed(1)
+			if (per300mseconds<10){per300mseconds = "0" + String(per300mseconds)}
+			textSize(width/50)
+			text("You ran 10x300m hill repeats at " + minutes + ":" +seconds + " per mile pace.",width/3.8,height/2.5)
+			text(per300mminutes + ":" + per300mseconds + " per hill repeat",width/3.8,height/2.2)
+			text("Fitness + " + 0.1,width/3,height/2)
+			text("Speed + " + 0.8,width/3,height/1.85)
+			me.fitness = float((me.fitness+0.1).toFixed(3))
+			me.speed = float((me.speed+0.8).toFixed(3))
+			let next = createButton('Next >>');
+			next.id("next")
+			next.position(width/2.9,height/1.5)
+			next.mousePressed(function() {
+				me.dayNum+=1
+				me.newDay()
+			})
+		}
 	}
 
 	AnTre(){
@@ -405,27 +521,64 @@ class Runner{
 		let Interval200 = createButton('200m repeats');
 		Interval200.id("Interval200")
 		Interval200.position(width/2.9,height/2.2)
+		Interval200.mousePressed(function() {me.summary("200m",20)})
 
 		let Interval400 = createButton('400m repeats');
 		Interval400.id("Interval400")
 		Interval400.position(width/2.9,height/2.2 + height*0.05)
+		Interval400.mousePressed(function() {me.summary("400m",12)})
+
 
 		let Interval800 = createButton('800m repeats');
 		Interval800.id("Interval800")
 		Interval800.position(width/2.9,height/2.2 +height*0.1)
+		Interval800.mousePressed(function() {me.summary("800m",6)})
 
 		let Interval1600 = createButton('1600m repeats');
 		Interval1600.id("Interval1600")
 		Interval1600.position(width/2.9,height/2.2 +height*0.15)
+		Interval1600.mousePressed(function() {me.summary("1600m",3)})
 
 		let Interval300Hills = createButton('300m hill repeats');
 		Interval300Hills.id("Interval300Hills")
 		Interval300Hills.position(width/2.9,height/2.2 +height*0.2)
+		Interval300Hills.mousePressed(function() {me.summary("300mHills",10)})
+
 	}
 
+	CrossTrainre(){
+		fill("white")
+		rect(width/2-width/4,height/2-height/4,width/2,height/2)
+		fill("black")
+		textSize(width/25)
+		text("Day #" + me.dayNum, width/2,height/3.3)
+		textSize(width/60)
+		text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
+		clearButtons()
+		textSize(width/50)
+		text("You did the elliptical for 30 minutes",width/3.8,height/2.5)
+		text("Fitness + " + 0.4,width/3,height/2)
+		me.fitness = float((me.fitness+0.4).toFixed(3))
+		let next = createButton('Next >>');
+		next.id("next")
+		next.position(width/2.9,height/1.8)
+		next.mousePressed(function() {
+			me.dayNum+=1
+			me.newDay()
+		})
+		fill("white")
+	}
+
+	injuryTest(){
+		let randomNum = random(1,100)
+		if (randomNum<this.injury){
+			this.injured = true
+		}
+	}
 	newDay(){
+		this.injuryTest()
 		if(this.injured == false){
-			background("teal")
+			background("cyan")
 			clearButtons()
 			this.setDates()
 			this.setPaces()
@@ -469,7 +622,26 @@ class Runner{
 			// this.AnT.mousePressed(this.AnTre)
 		}
 		if(this.injured == true){
-
+			background("red")
+			clearButtons()
+			this.setDates()
+			this.setPaces()
+			this.CrossTrain = createButton('Cross Train');
+			this.CrossTrain.id("CrossTrain")
+			this.CrossTrain.position(width/2.9,height/2.2 + height*0.2)
+			this.CrossTrain.mousePressed(this.CrossTrainre)
+			textSize(20)
+			rect(width/2-width/4,height/2-height/4,width/2,height/2)
+			fill("black")
+			text("Fitness: " + this.fitness + "  Speed: " + this.speed + "  Injury: " + this.injury + "  Motivation: " + this.motivation,10,20)
+			textSize(width/50)
+			text("INJURED!",width/3,height/2.5)
+			textSize(width/25)
+			text("Day #" + me.dayNum, width/2,height/3.3)
+			textSize(width/60)
+			text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
+			this.speed = float((this.speed-0.2).toFixed(3))
+			text("Speed - 0.2",width/3,height/2.2)
 		}
 	}
 
@@ -478,7 +650,7 @@ class Runner{
 
 function setup(){
 	createCanvas(1000,700)
-	background("teal")
+	background("cyan")
 	me = new Runner(1,1,1,1,1)
 	me.newDay()
 }
