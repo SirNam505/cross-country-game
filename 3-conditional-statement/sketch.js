@@ -90,7 +90,7 @@ class Runner{
 		}
 	}
 	setPaces(){
-		this.milePace = 6-(this.fitness*this.speed)/50
+		this.milePace = 6-(this.fitness*this.speed)**(0.6)/50
 	}
 	setDates(){
 		if (this.dayNum % 7 == 1){
@@ -161,9 +161,68 @@ class Runner{
 			})
 
 		}
-		if (type == "LongRun"){}
-		if (type == "AnT"){}
-		if (type == "AT"){}
+		if (type == "LongRun"){
+			clearButtons()
+			let pace = me.milePace + random(2,2.1)
+			let minutes = floor(pace)
+			let seconds = ((pace-minutes)*60).toFixed(2)
+			if (seconds<10){seconds = "0" + String(seconds)}
+			let miles = float((length/pace).toFixed(2))
+			textSize(width/50)
+			text("You ran " + miles + " miles at " + minutes + ":" +seconds + " per mile pace.",width/3,height/2.5)
+			text("Fitness + " + (miles/10).toFixed(3),width/3,height/2)
+			me.fitness = float((me.fitness+miles/10).toFixed(3))
+			let next = createButton('Next >>');
+			next.id("next")
+			next.position(width/2.9,height/1.8)
+			next.mousePressed(function() {
+				me.dayNum+=1
+				me.newDay()
+			})
+		}
+
+		if (type == "AnT"){
+			clearButtons()
+			let pace = me.milePace + random(0.9,1)
+			let minutes = floor(pace)
+			let seconds = ((pace-minutes)*60).toFixed(1)
+			if (seconds<10){seconds = "0" + String(seconds)}
+			let miles = float((length/pace).toFixed(2))
+			textSize(width/50)
+			text("You ran " + miles + " miles at " + minutes + ":" +seconds + " per mile pace.",width/3,height/2.5)
+			text("Fitness + " + (miles/10).toFixed(3),width/3,height/2)
+			text("Speed + " + 0.5,width/3,height/1.85)
+			me.fitness = float((me.fitness+miles/10).toFixed(3))
+			me.speed = float((me.speed+0.5).toFixed(3))
+			let next = createButton('Next >>');
+			next.id("next")
+			next.position(width/2.9,height/1.8)
+			next.mousePressed(function() {
+				me.dayNum+=1
+				me.newDay()
+			})
+		}
+		if (type == "AT"){
+			clearButtons()
+			let pace = me.milePace + random(1.3,1.5)
+			let minutes = floor(pace)
+			let seconds = ((pace-minutes)*60).toFixed(1)
+			if (seconds<10){seconds = "0" + String(seconds)}
+			let miles = float((length/pace).toFixed(2))
+			textSize(width/50)
+			text("You ran " + miles + " miles at " + minutes + ":" +seconds + " per mile pace.",width/3,height/2.5)
+			text("Fitness + " + (miles/10).toFixed(3),width/3,height/2)
+			text("Speed + " + 0.45,width/3,height/1.85)
+			me.fitness = float((me.fitness+miles/10).toFixed(3))
+			me.speed = float((me.speed+0.45).toFixed(3))
+			let next = createButton('Next >>');
+			next.id("next")
+			next.position(width/2.9,height/1.8)
+			next.mousePressed(function() {
+				me.dayNum+=1
+				me.newDay()
+			})
+		}
 		if (type == "200m"){}
 		if (type == "400m"){}
 		if (type == "800m"){}
@@ -191,14 +250,23 @@ class Runner{
 		let AnT12 = createButton('12 minutes');
 		AnT12.id("12AnT")
 		AnT12.position(width/2.9,height/2.2)
+		AnT12.mousePressed(function() {
+			me.summary("AnT",12)
+		})
 
 		let AnT15 = createButton('15 minutes');
 		AnT15.id("15AnT")
 		AnT15.position(width/2.9,height/2.2 + height*0.05)
+		AnT15.mousePressed(function() {
+			me.summary("AnT",15)
+		})
 
 		let AnT18 = createButton('18 minutes');
 		AnT18.id("18AnT")
 		AnT18.position(width/2.9,height/2.2 +height*0.1)
+		AnT18.mousePressed(function() {
+			me.summary("AnT",18)
+		})
 	}
 
 
@@ -264,18 +332,23 @@ class Runner{
 		let LongRun50 = createButton('50 minutes');
 		LongRun50.id("LongRun50")
 		LongRun50.position(width/2.9,height/2.2)
+		LongRun50.mousePressed(function() {me.summary("LongRun",50)})
 
 		let LongRun60 = createButton('60 minutes');
 		LongRun60.id("LongRun60")
 		LongRun60.position(width/2.9,height/2.2 + height*0.05)
+		LongRun60.mousePressed(function() {me.summary("LongRun",60)})
 
 		let LongRun70 = createButton('70 minutes');
 		LongRun70.id("LongRun70")
 		LongRun70.position(width/2.9,height/2.2 +height*0.1)
+		LongRun70.mousePressed(function() {me.summary("LongRun",70)})
 
 		let LongRun80 = createButton('80 minutes');
 		LongRun80.id("LongRun80")
 		LongRun80.position(width/2.9,height/2.2 +height*0.15)
+		LongRun80.mousePressed(function() {me.summary("LongRun",80)})
+
 	}
 	ATre(){
 		rect(width/2-width/4,height/2-height/4,width/2,height/2)
@@ -297,14 +370,19 @@ class Runner{
 		let AT20 = createButton('20 minutes');
 		AT20.id("AT20")
 		AT20.position(width/2.9,height/2.2)
+		AT20.mousePressed(function() {me.summary("AT",20)})
 
 		let AT25 = createButton('25 minutes');
 		AT25.id("AT25")
 		AT25.position(width/2.9,height/2.2 + height*0.05)
+		AT25.mousePressed(function() {me.summary("AT",25)})
+
 
 		let AT30 = createButton('30 minutes');
 		AT30.id("AT30")
 		AT30.position(width/2.9,height/2.2 +height*0.1)
+		AT30.mousePressed(function() {me.summary("AT",30)})
+
 	}
 
 	Intervalre(){
