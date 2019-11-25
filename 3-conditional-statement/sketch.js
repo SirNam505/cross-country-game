@@ -1,13 +1,22 @@
-var config = {
-    apiKey: "AIzaSyDteYGV8-s0KtRb4vME3DBm1cXVt198zho",
-    authDomain: "cross-country-a8ece.firebaseapp.com",
-    databaseURL: "https://cross-country-a8ece.firebaseio.com",
-    storageBucket: "cross-country-a8ece.appspot.com"
+
+var firebaseConfig = {
+    apiKey: "AIzaSyAtyuxjjcp0J3d00vgWPeGWuIOWdp8ncXA",
+    authDomain: "cross-country-5ff42.firebaseapp.com",
+    databaseURL: "https://cross-country-5ff42.firebaseio.com",
+    projectId: "cross-country-5ff42",
+    storageBucket: "cross-country-5ff42.appspot.com",
+    messagingSenderId: "428444593391",
+    appId: "1:428444593391:web:6f71ad0ddf85d58a1c7f1a",
+    measurementId: "G-8BKH9GSPCC"
   };
-
-firebase.initializeApp(config);
-
-// var database = firebase.database();
+  // Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+var database = firebase.database()
+firebase.database().ref('users/Kyan').set({
+    username: "Kyan",
+    email: "email",
+    profile_picture : "imageUrl"
+  });
 
 
 function clearButtons(){
@@ -30,15 +39,15 @@ workout = [
 	["Recovery Run",40],
 	["Long Run",80],
 	["REST"],
-	["ANT",15],
-	["REST"],
+	["AT",15],
+	["Recovery Run",40],
 	["Recovery Run",30],
 	["race","Lake Merced Race",25],
 	["Recovery Run",30],
 	["Long Run",80],
 	["REST"],
-	["ANT",15],
-	["REST"],
+	["1600m",15],
+	["Recovery Run",40],
 	["Recovery Run",30],
 	["race","Lake Merced Race",25],
 	["Recovery Run",30],
@@ -58,7 +67,7 @@ workout = [
 	["Recovery Run",50],
 	["Long Run",75],
 	["REST"],
-	["ANT",10],
+	["ANT",20],
 	["Recovery Run",50],
 	["Recovery Run",40],
 	["race","Lake Merced Race",25],
@@ -72,7 +81,7 @@ workout = [
 	["Recovery Run",50],
 	["Long Run",75],
 	["REST"],
-	["Speed Workout",10],
+	["1600m",10],
 	["Recovery Run",50],
 	["Recovery Run",40],
 	["race","Lake Merced Race",25],
@@ -88,7 +97,7 @@ workout = [
 
 ]
 class Runner{
-	constructor(fitness,speed,injury,motivation,day){
+	constructor(fitness,speed,injury,motivation,name){
 		this.fitness = fitness
 		this.speed = speed
 		this.injury = injury
@@ -100,6 +109,22 @@ class Runner{
 		this.previous = 0
 		this.injuryDays = 0
 		this.miles = 0
+		this.name = name
+		firebase.database().ref('users/' + this.name).set({
+			username: this.name,
+			miles: this.miles,
+			"fitness": this.fitness,
+			"speed": this.speed,
+			"injury": this.injury,
+			motivation: this.motivation,
+			dayNum: this.dayNum,
+			milePace: this.milePace,
+			injured: this.injured,
+			summer: this.summer,
+			previous: this.previous,
+			injuryDays: this.injuryDays,
+			miles: this.miles,
+		  });
 		if(this.dayNum>63){
 			this.summer = false
 		}
@@ -107,6 +132,21 @@ class Runner{
 
 	setPaces(){
 		this.milePace = 6-(this.fitness*this.speed)**(0.6)/50
+		firebase.database().ref('users/' + this.name).set({
+			username: this.name,
+			miles: this.miles,
+			"fitness": this.fitness,
+			"speed": this.speed,
+			"injury": this.injury,
+			motivation: this.motivation,
+			dayNum: this.dayNum,
+			milePace: this.milePace,
+			injured: this.injured,
+			summer: this.summer,
+			previous: this.previous,
+			injuryDays: this.injuryDays,
+			miles: this.miles,
+		  });
 	}
 	setDates(){
 		if (this.dayNum % 7 == 1){
@@ -867,7 +907,7 @@ class Runner{
 function setup(){
 	createCanvas(1000,700)
 	background("cyan")
-	me = new Runner(1,1,1,1,1)
+	me = new Runner(1,1,1,1,"Kyan")
 	me.newDay()
 }
 
