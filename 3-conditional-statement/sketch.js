@@ -1,10 +1,10 @@
 var config = {
-    apiKey: "apiKey",
-    authDomain: "projectId.firebaseapp.com",
+    apiKey: "AIzaSyDteYGV8-s0KtRb4vME3DBm1cXVt198zho",
+    authDomain: "cross-country-a8ece.firebaseapp.com",
     databaseURL: "https://cross-country-a8ece.firebaseio.com",
-    storageBucket: "bucket.appspot.com"
+    storageBucket: "cross-country-a8ece.appspot.com"
   };
-  
+
 firebase.initializeApp(config);
 
 // var database = firebase.database();
