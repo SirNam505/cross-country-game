@@ -12,25 +12,18 @@ var firebaseConfig = {
   // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 var database = firebase.database()
-firebase.database().ref('users/Kyan').set({
-    username: "Kyan",
-    email: "email",
-    profile_picture : "imageUrl"
-  });
-
 
 function clearButtons(){
 	var buttons = document.getElementsByTagName('button');
-	console.log(buttons)
 	if (buttons) {
 	  var num = buttons.length
 	  for (var i = 0; i < num; i++) {
-		console.log(buttons[0])
 		buttons[0].remove()
 	}
 	}
 }
 
+var wait = false
 workout = [
 	["race","1600m Time Trial"],
 	["Recovery Run",30],
@@ -45,7 +38,7 @@ workout = [
 	["race","Lake Merced Race",25],
 	["Recovery Run",30],
 	["Long Run",80],
-	["REST"],
+	["REST"], //summer 2
 	["1600m",15],
 	["Recovery Run",40],
 	["Recovery Run",30],
@@ -59,7 +52,7 @@ workout = [
 	["race","Lake Merced Race",25],
 	["Recovery Run",50],
 	["Long Run",75],
-	["REST"],
+	["REST"], //summer 4
 	["race","1600 Time Trial",10],
 	["Recovery Run",50],
 	["Recovery Run",40],
@@ -73,7 +66,7 @@ workout = [
 	["race","Lake Merced Race",25],
 	["Recovery Run",50],
 	["Long Run",75],
-	["REST"],
+	["REST"], // summer 6
 	["Hill Repeats",10],
 	["Recovery Run",50],
 	["Recovery Run",40],
@@ -87,14 +80,125 @@ workout = [
 	["race","Lake Merced Race",25],
 	["Recovery Run",50],
 	["Long Run",90],
-	["REST"],
+	["REST"], //summer 8 
 	["race","1600 Time Trial",10],
 	["Recovery Run",50],
 	["Recovery Run",40],
 	["race","Lake Merced Race",25],
 	["Recovery Run",50],
 	["Long Run",75],
-
+	["REST"], //summer 9
+	["ANT",15],
+	["Recovery Run",30],
+	["Recovery Run",40],
+	["race","Lake Merced Race"],
+	["Recovery Run",30],
+	["Long Run",75],
+	["REST"], //week 1
+	["1600m"],
+	["Recovery Run",40],
+	["AT",25],
+	["Recovery Run",50],
+	["800m",40],
+	["Long Run",80],
+	["REST"],
+	["Recovery Run",30],
+	["400m",10],
+	["AT",25],
+	["Recovery Run",30],
+	["race","Home Course Time Trial"],
+	["Long Run",80],
+	["REST"], // This is the end of week three of the season
+	["AT",30],
+	["Recovery Run",60],
+	["800m",6],
+	["Recovery Run",50],
+	["ANT",12],
+	["Long Run",80],
+	["REST"], //End of week 4
+	["400m",12],
+	["Recovery Run",55],
+	["ANT",15],
+	["Recovery Run",50],
+	["Recovery Run",30],
+	["race","Viking Opener Invitational"],
+	["REST"], // week 5
+	["1600m",4],
+	["Recovery Run",40],
+	["AT",30],
+	["Recovery Run",40],
+	["Recovery Run",30],
+	["race","Farmer's Invitational"],
+	["REST"], //week 6
+	["AT",30],
+	["Recovery Run",55],
+	["1600m",4],
+	["Recovery Run",40],
+	["ANT",20],
+	["Long Run",85],
+	["REST"], //week 7
+	["800m",6],
+	["Recovery Run",30],
+	["race","BCL 1"],
+	["Recovery Run",40],
+	["Hill Repeats",30],
+	["Long Run",90],
+	["REST",40], // end of week 8
+	["1600m",4],
+	["Recovery Run",40],
+	["AT",30],
+	["Recovery Run",30],
+	["race","Jim Tracy Challenge"],
+	["Long Run",70],
+	["REST",40], // end of 9
+	["400m",12],
+	["Recovery Run",45],
+	["ANT",15],
+	["Recovery Run",45],
+	["200m",20],
+	["Long Run",65],
+	["REST"], // end of 10
+	["1600m",4],
+	["Recovery Run",60],
+	["AT",30],
+	["Recovery Run",50],
+	["ANT",18],
+	["Long Run",70],
+	["REST"], //end of 11
+	["800m",5],
+	["Recovery Run",40],
+	["AT",30],
+	["Recovery Run",50],
+	["race","BCL 2"],
+	["Long Run",75],
+	["REST"],
+	["800m",9],
+	["Recovery Run",50],
+	["200m",8],
+	["Recovery Run",30],
+	["race","BCL West Championship"],
+	["Long Run",80],
+	["REST"], // end of speed peak 1, week 13
+	["800m",7],
+	["Recovery Run",50],
+	["AT",30],
+	["Recovery Run",40],
+	["1600m",3],
+	["Long Run",75],
+	["REST"], // end of 14
+	["400m",12],
+	["Recovery Run",40],
+	["Hill Repeats",12],
+	["Recovery Run",40],
+	["Recovery Run",30],
+	["race","NCS Championship"],
+	["REST"],
+	["800m",5],
+	["Recovery Run",40],
+	["200m",8],
+	["Recovery Run",40],
+	["Recovery Run",30],
+	["race","State Championship"],
 ]
 class Runner{
 	constructor(fitness,speed,injury,motivation,name){
@@ -110,12 +214,44 @@ class Runner{
 		this.injuryDays = 0
 		this.miles = 0
 		this.name = name
+		firebase.database().ref("users").once('value',this.getName)
+		
+		if(this.dayNum>63){
+			this.summer = false
+		}
+		// this.newDay()
+	}
+
+	getName(snapshot){
+		var same = false
+		snapshot.forEach(userSnapshot => {
+			var name = userSnapshot.val().username
+			console.log(me.name)
+			console.log(name)
+			if(me.name == name){
+				same = true
+			}
+		})
+		console.log(same)
+		if (same){
+			me.fitness = snapshot.child(me.name).val().fitness
+			me.dayNum = snapshot.child(me.name).val().dayNum
+			me.injured = snapshot.child(me.name).val().injured
+			me.injury = snapshot.child(me.name).val().injury
+			me.injuryDays = snapshot.child(me.name).val().injuryDays
+			me.milePace = snapshot.child(me.name).val().milePace
+			me.miles = snapshot.child(me.name).val().miles
+			me.motivation = snapshot.child(me.name).val().motivation
+			me.previous = snapshot.child(me.name).val().previous
+			me.speed = snapshot.child(me.name).val().speed
+			me.summer = snapshot.child(me.name).val().summer
+		}else{
 		firebase.database().ref('users/' + this.name).set({
 			username: this.name,
 			miles: this.miles,
-			"fitness": this.fitness,
-			"speed": this.speed,
-			"injury": this.injury,
+			fitness: this.fitness,
+			speed: this.speed,
+			injury: this.injury,
 			motivation: this.motivation,
 			dayNum: this.dayNum,
 			milePace: this.milePace,
@@ -125,13 +261,13 @@ class Runner{
 			injuryDays: this.injuryDays,
 			miles: this.miles,
 		  });
-		if(this.dayNum>63){
-			this.summer = false
 		}
+		wait = true
 	}
 
 	setPaces(){
 		this.milePace = 6-(this.fitness*this.speed)**(0.6)/50
+		console.log(this.miles)
 		firebase.database().ref('users/' + this.name).set({
 			username: this.name,
 			miles: this.miles,
@@ -904,11 +1040,14 @@ class Runner{
 	daySummary(){}
 }
 
+
+
 function setup(){
+	var NAME = prompt("What is your name?")
 	createCanvas(1000,700)
 	background("cyan")
-	me = new Runner(1,1,1,1,"Kyan")
-	me.newDay()
+	me = new Runner(1,1,1,1,NAME)
+	setTimeout(function(){me.newDay()},1500)
 }
 
 function draw(){
