@@ -9,7 +9,6 @@ var firebaseConfig = {
     appId: "1:428444593391:web:6f71ad0ddf85d58a1c7f1a",
     measurementId: "G-8BKH9GSPCC"
   };
-  // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 var database = firebase.database()
 
@@ -1036,11 +1035,7 @@ class Runner{
 
 		}
 	}
-
-	daySummary(){}
 }
-
-
 
 function setup(){
 	var NAME = prompt("What is your name?")
