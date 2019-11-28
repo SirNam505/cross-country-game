@@ -266,6 +266,12 @@ class Runner{
 
 	setPaces(){
 		this.milePace = 6-(this.fitness*this.speed)**(0.6)/50
+		var fiveK = (this.milePace*3.5).toFixed(3)
+		var fiveKminutes = floor(fiveK)
+		var fiveKseconds = ((fiveK - fiveKminutes)*60).toFixed(2)
+		if (fiveKseconds<10){fiveKseconds = "0" + String(fiveKseconds)}
+		this.fiveKtime = fiveKminutes + ':' + fiveKseconds
+
 		console.log(this.miles)
 		firebase.database().ref('users/' + this.name).set({
 			username: this.name,
@@ -974,6 +980,7 @@ class Runner{
 			text("Day #" + me.dayNum, width/2,height/3.3)
 			textSize(width/60)
 			text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
+			text(this.fiveKtime,width/1.5,height/2-height/4+20)
 			fill("white")
 			this.RecoveryRun = createButton('Recovery Run');
 			this.RecoveryRun.id("RecoveryRun")
@@ -1042,7 +1049,7 @@ function setup(){
 	createCanvas(1000,700)
 	background("cyan")
 	me = new Runner(1,1,1,1,NAME)
-	setTimeout(function(){me.newDay()},1500)
+	setTimeout(function(){me.newDay()},2000)
 }
 
 function draw(){
