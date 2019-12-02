@@ -200,24 +200,21 @@ workout = [
 	["race","State Championship"],
 ]
 class Runner{
-	constructor(fitness,speed,injury,motivation,name){
+	constructor(fitness,speed,injury,name,improvement){
 		this.fitness = fitness
 		this.speed = speed
 		this.injury = injury
-		this.motivation = motivation
 		this.dayNum = 1
-		this.milePace = 6-(this.fitness*this.speed)/100
+		this.milePace = 6-(this.fitness*this.speed)**(0.6)/70
 		this.injured = false
 		this.summer = true
 		this.previous = 0
 		this.injuryDays = 0
 		this.miles = 0
 		this.name = name
+		this.improvement = improvement
 		firebase.database().ref("users").once('value',this.getName)
 		
-		if(this.dayNum>63){
-			this.summer = false
-		}
 		// this.newDay()
 	}
 
@@ -240,38 +237,39 @@ class Runner{
 			me.injuryDays = snapshot.child(me.name).val().injuryDays
 			me.milePace = snapshot.child(me.name).val().milePace
 			me.miles = snapshot.child(me.name).val().miles
-			me.motivation = snapshot.child(me.name).val().motivation
 			me.previous = snapshot.child(me.name).val().previous
 			me.speed = snapshot.child(me.name).val().speed
 			me.summer = snapshot.child(me.name).val().summer
+			me.improvement = snapshot.child(me.name).val().improvement
+
 		}else{
-		firebase.database().ref('users/' + this.name).set({
-			username: this.name,
-			miles: this.miles,
-			fitness: this.fitness,
-			speed: this.speed,
-			injury: this.injury,
-			motivation: this.motivation,
-			dayNum: this.dayNum,
-			milePace: this.milePace,
-			injured: this.injured,
-			summer: this.summer,
-			previous: this.previous,
-			injuryDays: this.injuryDays,
-			miles: this.miles,
-		  });
+			firebase.database().ref('users/' + this.name).set({
+				username: this.name,
+				miles: this.miles,
+				"fitness": this.fitness,
+				"speed": this.speed,
+				"injury": this.injury,
+				dayNum: this.dayNum,
+				milePace: this.milePace,
+				injured: this.injured,
+				summer: this.summer,
+				previous: this.previous,
+				injuryDays: this.injuryDays,
+				miles: this.miles,
+				improvement: this.improvement
+			  });
 		}
 		wait = true
 	}
 
 	setPaces(){
-		this.milePace = 6-(this.fitness*this.speed)**(0.6)/50
+		this.milePace = 6-(this.fitness*this.speed)**(0.6)/70
 		var fiveK = (this.milePace*3.5).toFixed(3)
 		var fiveKminutes = floor(fiveK)
 		var fiveKseconds = ((fiveK - fiveKminutes)*60).toFixed(2)
 		if (fiveKseconds<10){fiveKseconds = "0" + String(fiveKseconds)}
 		this.fiveKtime = fiveKminutes + ':' + fiveKseconds
-
+		if (this.dayNum > 63){this.summer = false}
 		console.log(this.miles)
 		firebase.database().ref('users/' + this.name).set({
 			username: this.name,
@@ -279,7 +277,6 @@ class Runner{
 			"fitness": this.fitness,
 			"speed": this.speed,
 			"injury": this.injury,
-			motivation: this.motivation,
 			dayNum: this.dayNum,
 			milePace: this.milePace,
 			injured: this.injured,
@@ -287,6 +284,7 @@ class Runner{
 			previous: this.previous,
 			injuryDays: this.injuryDays,
 			miles: this.miles,
+			improvement: this.improvement
 		  });
 	}
 	setDates(){
@@ -338,6 +336,7 @@ class Runner{
 		textSize(width/25)
 		text("Day #" + me.dayNum, width/2,height/3.3)
 		textSize(width/60)
+		if (me.summer){text("Summer",width/2-width/4+5,height/2-height/4+50)}else{text("Season",width/2-width/4+5,height/2-height/4+50)}
 		text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
 		
 		if (type == "RecoveryRun"){
@@ -350,8 +349,8 @@ class Runner{
 			let miles = float((length/pace).toFixed(2))
 			textSize(width/50)
 			text("You ran " + miles + " miles at " + minutes + ":" +seconds + " per mile pace.",width/3,height/2.5)
-			text("Fitness + " + (miles/10).toFixed(3),width/3,height/2)
-			me.fitness = float((me.fitness+miles/10).toFixed(3))
+			text("Fitness + " + (miles*me.improvement/10).toFixed(3),width/3,height/2)
+			me.fitness = float((me.fitness+miles*me.improvement/10).toFixed(3))
 			let injury = (1-abs(miles/10 - 0.5)).toFixed(2)
 			text("Injury - " + injury,width/3,height/1.8)
 			me.injury = float((me.injury-injury).toFixed(2))
@@ -380,11 +379,11 @@ class Runner{
 			let miles = float((length/pace).toFixed(2))
 			textSize(width/50)
 			text("You ran " + miles + " miles at " + minutes + ":" +seconds + " per mile pace.",width/3,height/2.5)
-			text("Fitness + " + (miles/10).toFixed(3),width/3,height/2)
+			text("Fitness + " + (miles*me.improvement/10).toFixed(3),width/3,height/2)
 			let injury = (0.5-abs(miles/10 - 0.7)).toFixed(2)
 			text("Injury - " + injury,width/3,height/1.8)
 			me.injury = float((me.injury-injury).toFixed(2))
-			me.fitness = float((me.fitness+miles/10).toFixed(3))
+			me.fitness = float((me.fitness+miles*me.improvement/10).toFixed(3))
 			me.miles = float((me.miles+miles).toFixed(3))
 			if (workout[me.dayNum-1][0] == "Long Run"){
 				text("Correct choice for Day #" + me.dayNum + "! Fitness + 0.3",width/3,height/1.65)
@@ -411,10 +410,10 @@ class Runner{
 			let miles = float((length/pace).toFixed(2))
 			textSize(width/50)
 			text("You ran " + miles + " miles at " + minutes + ":" +seconds + " per mile pace.",width/3,height/2.5)
-			text("Fitness + " + (miles/10).toFixed(3),width/3,height/2)
-			text("Speed + " + 0.8,width/3,height/1.85)
-			me.fitness = float((me.fitness+miles/10).toFixed(3))
-			me.speed = float((me.speed+0.8).toFixed(3))
+			text("Fitness + " + (miles*me.improvement/10).toFixed(3),width/3,height/2)
+			text("Improvement + " + 0.02,width/3,height/1.85)
+			me.improvement = float((me.improvement + 0.02).toFixed(3))
+			me.fitness = float((me.fitness+miles*me.improvement/10).toFixed(3))
 			let injury = float((miles/5).toFixed(2))
 			text("Injury + " + injury,width/3,height/1.72)
 			me.injury = float((me.injury+injury).toFixed(2))
@@ -448,10 +447,10 @@ class Runner{
 			let miles = float((length/pace).toFixed(2))
 			textSize(width/50)
 			text("You ran " + miles + " miles at " + minutes + ":" +seconds + " per mile pace.",width/3,height/2.5)
-			text("Fitness + " + (miles/10).toFixed(3),width/3,height/2)
-			text("Speed + " + 0.65,width/3,height/1.85)
-			me.fitness = float((me.fitness+miles/10).toFixed(3))
-			me.speed = float((me.speed+0.65).toFixed(3))
+			text("Fitness + " + (miles*me.improvement/10).toFixed(3),width/3,height/2)
+			text("Improvement + " + 0.02,width/3,height/1.85)
+			me.fitness = float((me.fitness+miles*me.improvement/10).toFixed(3))
+			me.improvement = float((me.improvement + 0.02).toFixed(3))
 			let injury = float((miles/10).toFixed(2))
 			text("Injury + " + injury,width/3,height/1.72)
 			me.injury = float((me.injury+injury).toFixed(2))
@@ -488,8 +487,8 @@ class Runner{
 			textSize(width/50)
 			text("You ran 20x200m repeats at " + minutes + ":" +seconds + " per mile pace.",width/3.5,height/2.5)
 			text(per200mminutes + ":" + per200mseconds + " per 200m",width/3.5,height/2.2)
-			text("Speed + " + 1.05,width/3,height/1.85)
-			me.speed = float((me.speed+1.05).toFixed(3))
+			text("Speed + " + (1.05*me.improvement).toFixed(3),width/3,height/1.85)
+			me.speed = float((me.speed+1.05*me.improvement).toFixed(3))
 			let injury = 1.5
 			text("Injury + " + injury,width/3,height/1.72)
 			me.injury = float((me.injury+injury).toFixed(2))
@@ -526,8 +525,8 @@ class Runner{
 			textSize(width/50)
 			text("You ran 12x400m repeats at " + minutes + ":" +seconds + " per mile pace.",width/3.5,height/2.5)
 			text(per400mminutes + ":" + per400mseconds + " per 400m",width/3.5,height/2.2)
-			text("Speed + " + 1,width/3,height/1.85)
-			me.speed = float((me.speed+1).toFixed(3))
+			text("Speed + " + (1*me.improvement).toFixed(3),width/3,height/1.85)
+			me.speed = float((me.speed+1*me.improvement).toFixed(3))
 			let injury = 1.3
 			me.miles = float((me.miles+6).toFixed(3))
 			text("Injury + " + injury,width/3,height/1.72)
@@ -564,10 +563,10 @@ class Runner{
 			textSize(width/50)
 			text("You ran 6x800m repeats at " + minutes + ":" +seconds + " per mile pace.",width/3.5,height/2.5)
 			text(per800mminutes + ":" + per800mseconds + " per 800m",width/3.5,height/2.2)
-			text("Fitness + " + 0.1,width/3,height/2)
-			text("Speed + " + 0.9,width/3,height/1.85)
-			me.fitness = float((me.fitness+0.1).toFixed(3))
-			me.speed = float((me.speed+0.9).toFixed(3))
+			text("Fitness + " + (0.1*me.improvement).toFixed(3),width/3,height/2)
+			text("Speed + " + (0.9*me.improvement).toFixed(3),width/3,height/1.85)
+			me.fitness = float((me.fitness+0.1*me.improvement).toFixed(3))
+			me.speed = float((me.speed+0.9*me.improvement).toFixed(3))
 			let injury = 0.8
 			text("Injury + " + injury,width/3,height/1.72)
 			me.injury = float((me.injury+injury).toFixed(2))
@@ -604,10 +603,10 @@ class Runner{
 			textSize(width/50)
 			text("You ran 3x1600m repeats at " + minutes + ":" +seconds + " per mile pace.",width/3.5,height/2.5)
 			text(minutes + ":" + seconds + " per 1600m",width/3.5,height/2.2)
-			text("Fitness + " + 0.2,width/3,height/2)
-			text("Speed + " + 0.8,width/3,height/1.85)
-			me.fitness = float((me.fitness+0.2).toFixed(3))
-			me.speed = float((me.speed+0.8).toFixed(3))
+			text("Fitness + " + (0.2*me.improvement).toFixed(3),width/3,height/2)
+			text("Speed + " +(0.8*me.improvement).toFixed(3),width/3,height/1.85)
+			me.fitness = float((me.fitness+0.2*me.improvement).toFixed(3))
+			me.speed = float((me.speed+0.8*me.improvement).toFixed(3))
 			let injury = 1
 			text("Injury + " + injury,width/3,height/1.72)
 			me.injury = float((me.injury+injury).toFixed(2))
@@ -644,10 +643,10 @@ class Runner{
 			textSize(width/50)
 			text("You ran 10x300m hill repeats at " + minutes + ":" +seconds + " per mile pace.",width/3.8,height/2.5)
 			text(per300mminutes + ":" + per300mseconds + " per hill repeat",width/3.8,height/2.2)
-			text("Fitness + " + 0.1,width/3,height/2)
-			text("Speed + " + 1,width/3,height/1.85)
-			me.fitness = float((me.fitness+0.1).toFixed(3))
-			me.speed = float((me.speed+1).toFixed(3))
+			text("Fitness + " + (0.1*me.improvement).toFixed(3),width/3,height/2)
+			text("Speed + " +(1*me.improvement).toFixed(3),width/3,height/1.85)
+			me.fitness = float((float(me.fitness)+0.1*me.improvement).toFixed(3))
+			me.speed = float(float(me.speed+1*me.improvement).toFixed(3))
 			let injury = 1.5
 			text("Injury + " + injury,width/3,height/1.72)
 			me.injury = float((me.injury+injury).toFixed(2))
@@ -681,6 +680,7 @@ class Runner{
 		textSize(width/25)
 		text("Day #" + me.dayNum, width/2,height/3.3)
 		textSize(width/60)
+		if (me.summer){text("Summer",width/2-width/4+5,height/2-height/4+50)}else{text("Season",width/2-width/4+5,height/2-height/4+50)}
 		text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
 		clearButtons()
 		let back = createButton('back');
@@ -724,6 +724,7 @@ class Runner{
 		textSize(width/25)
 		text("Day #" + me.dayNum, width/2,height/3.3)
 		textSize(width/60)
+		if (me.summer){text("Summer",width/2-width/4+5,height/2-height/4+50)}else{text("Season",width/2-width/4+5,height/2-height/4+50)}
 		text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
 		clearButtons()
 		let back = createButton('back');
@@ -767,6 +768,7 @@ class Runner{
 		textSize(width/25)
 		text("Day #" + me.dayNum, width/2,height/3.3)
 		textSize(width/60)
+		if (me.summer){text("Summer",width/2-width/4+5,height/2-height/4+50)}else{text("Season",width/2-width/4+5,height/2-height/4+50)}
 		text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
 		clearButtons()
 		let back = createButton('back');
@@ -807,6 +809,7 @@ class Runner{
 		textSize(width/25)
 		text("Day #" + me.dayNum, width/2,height/3.3)
 		textSize(width/60)
+		if (me.summer){text("Summer",width/2-width/4+5,height/2-height/4+50)}else{text("Season",width/2-width/4+5,height/2-height/4+50)}
 		text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
 		clearButtons()
 		let back = createButton('back');
@@ -844,6 +847,7 @@ class Runner{
 		textSize(width/25)
 		text("Day #" + me.dayNum, width/2,height/3.3)
 		textSize(width/60)
+		if (me.summer){text("Summer",width/2-width/4+5,height/2-height/4+50)}else{text("Season",width/2-width/4+5,height/2-height/4+50)}
 		text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
 		clearButtons()
 		let back = createButton('back');
@@ -892,6 +896,7 @@ class Runner{
 		textSize(width/25)
 		text("Day #" + me.dayNum, width/2,height/3.3)
 		textSize(width/60)
+		if (me.summer){text("Summer",width/2-width/4+5,height/2-height/4+50)}else{text("Season",width/2-width/4+5,height/2-height/4+50)}
 		text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
 		clearButtons()
 		textSize(width/50)
@@ -922,6 +927,7 @@ class Runner{
 		textSize(width/25)
 		text("Day #" + me.dayNum, width/2,height/3.3)
 		textSize(width/60)
+		if (me.summer){text("Summer",width/2-width/4+5,height/2-height/4+50)}else{text("Season",width/2-width/4+5,height/2-height/4+50)}
 		text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
 		clearButtons()
 		textSize(width/50)
@@ -967,18 +973,20 @@ class Runner{
 		this.injuryTest()
 		if(this.injured == false){
 			background("cyan")
+
 			clearButtons()
 			this.setDates()
 			this.setPaces()
 			textSize(20)
 			rect(width/2-width/4,height/2-height/4,width/2,height/2)
 			fill("black")
-			text("Fitness: " + this.fitness + "  Speed: " + this.speed + "  Injury: " + this.injury + "  Miles: " + me.miles,10,20)
+			text("Fitness: " + this.fitness + "  Speed: " + this.speed + "  Injury: " + this.injury + "  Miles: " + me.miles + "  Improvement Rate: " + this.improvement + "  Name: " + this.name,10,20)
 			textSize(width/50)
 			text("Choose your type of workout:",width/3,height/2.5)
 			textSize(width/25)
 			text("Day #" + me.dayNum, width/2,height/3.3)
 			textSize(width/60)
+			if (me.summer){text("Summer",width/2-width/4+5,height/2-height/4+50)}else{text("Season",width/2-width/4+5,height/2-height/4+50)}
 			text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
 			text(this.fiveKtime,width/1.5,height/2-height/4+20)
 			fill("white")
@@ -1027,12 +1035,13 @@ class Runner{
 			textSize(20)
 			rect(width/2-width/4,height/2-height/4,width/2,height/2)
 			fill("black")
-			text("Fitness: " + this.fitness + "  Speed: " + this.speed + "  Injury: " + this.injury + "  Miles: " + me.miles,10,20)
+			text("Fitness: " + this.fitness + "  Speed: " + this.speed + "  Injury: " + this.injury + "  Miles: " + me.miless + "  Improvement Rate: " + this.improvement + "  Name: " + this.name,10,20)
 			textSize(width/50)
 			text("INJURED!",width/3,height/2.5)
 			textSize(width/25)
 			text("Day #" + me.dayNum, width/2,height/3.3)
 			textSize(width/60)
+			if (me.summer){text("Summer",width/2-width/4+5,height/2-height/4+50)}else{text("Season",width/2-width/4+5,height/2-height/4+50)}
 			text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
 			text("Injured days left: " + this.injuryDays,width/3,height/2.2)
 			this.speed = float((this.speed-0.2).toFixed(3))
@@ -1044,12 +1053,42 @@ class Runner{
 	}
 }
 
+function startScreen(_callback){
+	background("tan")
+	textSize(15)
+	text("Username: ",width/2.4-80, height/2.5+15)
+	input = createInput();
+	input.id("input")
+  	input.position(width/2.4, height/2.5);
+
+  	submit = createButton('submit');
+  	submit.position(width/2.4+140, height/2.5);
+	submit.mousePressed(function() {
+		NAME = input.value()
+		_callback()
+	})
+
+}
+
+
+function secondFunction(){
+    // call first function and pass in a callback function which
+    // first function runs when it has completed
+    startScreen(function() {
+		document.getElementById("input").remove()
+		clearButtons()
+		background("cyan")
+		me = new Runner(float(random(1,10).toFixed(2)),float(random(1,10).toFixed(2)),1,NAME,float(random(0.8,1.2).toFixed(2)))
+		setTimeout(function(){me.newDay()},2000)
+    });    
+}
+
 function setup(){
-	var NAME = prompt("What is your name?")
+	var NAME;
 	createCanvas(1000,700)
 	background("cyan")
-	me = new Runner(1,1,1,1,NAME)
-	setTimeout(function(){me.newDay()},2000)
+	secondFunction()
+
 }
 
 function draw(){
