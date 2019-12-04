@@ -50,7 +50,7 @@ function secondFunction(){
 		document.getElementById("input").remove()
 		clearButtons()
 		background("cyan")
-		me = new Runner(float(random(1,10).toFixed(2)),float(random(1,10).toFixed(2)),1,NAME,float(random(0.8,1.2).toFixed(2)))
+		me = new Runner(float(random(1,20).toFixed(2)),float(random(1,20).toFixed(2)),1,NAME)
 		setTimeout(function(){me.newDay()},2000)
     });
 }

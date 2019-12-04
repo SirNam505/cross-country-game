@@ -1,19 +1,19 @@
 
 
 class Runner{
-	constructor(fitness,speed,injury,name,improvement){
+	constructor(fitness,speed,injury,name){
 		this.fitness = fitness
 		this.speed = speed
 		this.injury = injury
 		this.dayNum = 1
-		this.milePace = 6-(this.fitness*this.speed)**(0.6)/70
+		this.milePace = 7-(this.fitness*this.speed)**(0.45)/19
 		this.injured = false
 		this.summer = true
 		this.previous = 0
 		this.injuryDays = 0
 		this.miles = 0
 		this.name = name
-		this.improvement = improvement
+		this.improvement = float((1.1 - (this.speed+this.fitness)/100).toFixed(2))
 		firebase.database().ref("users").once('value',this.getName)
 
 		// this.newDay()
@@ -64,7 +64,7 @@ class Runner{
 	}
 
 	setPaces(){
-		this.milePace = 6-(this.fitness*this.speed)**(0.6)/70
+		this.milePace = this.milePace = 7-(this.fitness*this.speed)**(0.45)/19
 		var fiveK = (this.milePace*3.5).toFixed(3)
 		var fiveKminutes = floor(fiveK)
 		var fiveKseconds = ((fiveK - fiveKminutes)*60).toFixed(2)
@@ -122,7 +122,7 @@ class Runner{
 			this.month = "October"
 			this.date = this.dateNum - 122
 		}else if (this.dateNum >=154 && this.dateNum <184){
-			this.month = "October"
+			this.month = "November"
 			this.date = this.dateNum - 153
 		}
 	}
@@ -393,7 +393,7 @@ class Runner{
 		if (type == "1600m"){
 			me.previous += 1
 			clearButtons()
-			let pace = me.milePace + random(0.6,0.8)
+			let pace = me.milePace + random(0.6,0.7)
 			let minutes = floor(pace)
 			let seconds = ((pace-minutes)*60).toFixed(1)
 			if (seconds<10){seconds = "0" + String(seconds)}
@@ -789,7 +789,7 @@ class Runner{
 			textSize(width/60)
 			if (me.summer){text("Summer",width/2-width/4+5,height/2-height/4+50)}else{text("Season",width/2-width/4+5,height/2-height/4+50)}
 			text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
-			text(this.fiveKtime,width/1.5,height/2-height/4+20)
+			text(this.fiveKtime,width/1.5 + 5,height/2-height/4+20)
 			fill("white")
 			this.RecoveryRun = createButton('Recovery Run');
 			this.RecoveryRun.id("RecoveryRun")
