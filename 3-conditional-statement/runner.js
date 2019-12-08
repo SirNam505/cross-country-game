@@ -12,6 +12,7 @@ class Runner{
 		this.previous = 0
 		this.injuryDays = 0
 		this.miles = 0
+		this.raceTime;
 		this.name = name
 		this.improvement = float((1.1 - (this.speed+this.fitness)/100).toFixed(2))
 		firebase.database().ref("users").once('value',this.getName)
@@ -65,13 +66,13 @@ class Runner{
 
 	setPaces(){
 		this.milePace = this.milePace = 7-(this.fitness*this.speed)**(0.45)/19
-		var fiveK = (this.milePace*3.5).toFixed(3)
+		this.fiveKpace = this.milePace*1.15
+		var fiveK = (this.fiveKpace*3.107).toFixed(3)
 		var fiveKminutes = floor(fiveK)
 		var fiveKseconds = ((fiveK - fiveKminutes)*60).toFixed(2)
 		if (fiveKseconds<10){fiveKseconds = "0" + String(fiveKseconds)}
 		this.fiveKtime = fiveKminutes + ':' + fiveKseconds
 		if (this.dayNum > 63){this.summer = false}
-		console.log(this.miles)
 		firebase.database().ref('users/' + this.name).set({
 			username: this.name,
 			miles: this.miles,
@@ -127,19 +128,15 @@ class Runner{
 		}
 	}
 
-
-	race(){}
-
 	summary(type,length){
 		fill("white")
-		rect(width/2-width/4,height/2-height/4,width/2,height/2)
+		image(scroll,width/17,height/11,width/1.1,height/1.3)
 		fill("black")
 		textSize(width/25)
 		text("Day #" + me.dayNum, width/2,height/3.3)
 		textSize(width/60)
 		if (me.summer){text("Summer",width/2-width/4+5,height/2-height/4+50)}else{text("Season",width/2-width/4+5,height/2-height/4+50)}
 		text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
-
 		if (type == "RecoveryRun"){
 			me.previous = 0
 			clearButtons()
@@ -413,7 +410,7 @@ class Runner{
 			me.injury = float((me.injury+injury).toFixed(2))
 			me.miles = float((me.miles+6).toFixed(3))
 			if (me.previous>=2){
-				text("Injury + 1, don't run two workouts in a row",width/3,height/1.6)
+				text("Injury + 1, don't run two workouts in a row",width/3,height/1.72)
 				me.injury = float((me.injury+1).toFixed(2))
 			}
 
@@ -474,7 +471,7 @@ class Runner{
 
 	AnTre(){
 		fill("white")
-		rect(width/2-width/4,height/2-height/4,width/2,height/2)
+		image(scroll,width/17,height/11,width/1.1,height/1.3)
 		fill("black")
 		textSize(width/50)
 		text("Choose the length of your AnT workout:",width/3,height/2.5)
@@ -518,7 +515,7 @@ class Runner{
 
 	RecoveryRunre(){
 		fill("white")
-		rect(width/2-width/4,height/2-height/4,width/2,height/2)
+		image(scroll,width/17,height/11,width/1.1,height/1.3)
 		fill("black")
 		textSize(width/50)
 		text("Choose the length of your recovery run:",width/3,height/2.5)
@@ -562,7 +559,7 @@ class Runner{
 
 	LongRunre(){
 		fill("white")
-		rect(width/2-width/4,height/2-height/4,width/2,height/2)
+		image(scroll,width/17,height/11,width/1.1,height/1.3)
 		fill("black")
 		textSize(width/50)
 		text("Choose the length of your long run:",width/3,height/2.5)
@@ -603,7 +600,7 @@ class Runner{
 	}
 	ATre(){
 		fill("white")
-		rect(width/2-width/4,height/2-height/4,width/2,height/2)
+		image(scroll,width/17,height/11,width/1.1,height/1.3)
 		fill("black")
 		textSize(width/50)
 		text("Choose the length of your AT workout:",width/3,height/2.5)
@@ -641,7 +638,7 @@ class Runner{
 
 	Intervalre(){
 		fill("white")
-		rect(width/2-width/4,height/2-height/4,width/2,height/2)
+		image(scroll,width/17,height/11,width/1.1,height/1.3)
 		fill("black")
 		textSize(width/50)
 		text("Choose what type of interval workout:",width/3,height/2.5)
@@ -688,9 +685,9 @@ class Runner{
 	}
 
 	CrossTrainre(){
-		background("red")
+		background(b2)
 		fill("white")
-		rect(width/2-width/4,height/2-height/4,width/2,height/2)
+		image(scroll,width/17,height/11,width/1.1,height/1.3)
 		fill("black")
 		textSize(20)
 		text("Fitness: " + me.fitness + "  Speed: " + me.speed + "  Injury: " + me.injury + "  Miles: " + me.miles,10,20)
@@ -719,9 +716,9 @@ class Runner{
 
 	RestDayre(){
 		me.previous=0
-		background("cyan")
+		background(Screen)
 		fill("white")
-		rect(width/2-width/4,height/2-height/4,width/2,height/2)
+		image(scroll,width/17,height/11,width/1.1,height/1.3)
 		fill("black")
 		textSize(20)
 		text("Fitness: " + me.fitness + "  Speed: " + me.speed + "  Injury: " + me.injury + "  Miles: " + me.miles,10,20)
@@ -755,15 +752,47 @@ class Runner{
 			me.newDay()
 		})
 		}
+
 	raceRe(){
-		unicorn = new Unicorn();
-		let i = 1
-		while(i<10){
-		i+=1
-		game()
-		}
-		me.dayNum+=1
-		me.newDay()
+		unicorn = new Unicorn()
+		console.log(me.raceName)
+		gameIsPlaying = true
+	}
+
+	raceSummary(){
+		background(Screen)
+		fill("white")
+		image(scroll,width/17,height/11,width/1.1,height/1.3)
+		fill("black")
+		textSize(width/25)
+		text("Day #" + me.dayNum, width/2,height/3.3)
+		textSize(20)
+		text("Fitness: " + me.fitness + "  Speed: " + me.speed + "  Injury: " + me.injury + "  Miles: " + me.miles,10,20)
+		textSize(width/60)
+		if (me.summer){text("Summer",width/2-width/4+5,height/2-height/4+50)}else{text("Season",width/2-width/4+5,height/2-height/4+50)}
+		text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
+		me.previous +=1
+		clearButtons()
+		textSize(width/50)
+		text("You ran " + workout[me.dayNum-1][2] + ' mile(s) in '+ me.raceTime,width/4+10,height/2.5)
+		text('At the ' + workout[me.dayNum-1][1],width/4+10,height/2.5+40)
+		text("Fitness + " + (0.5*me.improvement).toFixed(3),width/3,height/2)
+		me.fitness = float((me.fitness+1*me.improvement/10).toFixed(3))
+		let injury = 2
+		text("Injury + " + injury,width/3,height/2+25)
+		me.injury = float((me.injury+injury).toFixed(2))
+		text("Speed + 1",width/3,height/2+50)
+		me.speed = float((me.speed+1).toFixed(2))
+		text("Improvement Rate + 0.02",width/3,height/2+75)
+		me.improvement = float((me.improvement+0.02).toFixed(2))
+		me.miles = float((me.miles + (workout[me.dayNum-1][2]+2)).toFixed(3))
+		let next = createButton('Next >>');
+		next.id("next")
+		next.position(width/2.9,height/1.5)
+		next.mousePressed(function() {
+			me.dayNum+=1
+			me.newDay()
+		})
 	}
 
 	injuryTest(){
@@ -783,13 +812,12 @@ class Runner{
 		fill("white")
 		this.injuryTest()
 		if (workout[me.dayNum-1][0] == "race"){
-			background("cyan")
-
+			background(Screen)
 			clearButtons()
 			this.setDates()
 			this.setPaces()
 			textSize(20)
-			rect(width/2-width/4,height/2-height/4,width/2,height/2)
+			image(scroll,width/17,height/11,width/1.1,height/1.3)
 			fill("black")
 			text("Fitness: " + this.fitness + "  Speed: " + this.speed + "  Injury: " + this.injury + "  Miles: " + me.miles + "  Improvement Rate: " + this.improvement + "  Name: " + this.name,10,20)
 			textSize(width/50)
@@ -801,6 +829,7 @@ class Runner{
 			text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
 			text(this.fiveKtime,width/1.5 + 5,height/2-height/4+20)
 			fill("white")
+			this.raceName = workout[me.dayNum-1][1]
 			this.race = createButton('RACE');
 			this.race.id("race")
 			this.race.position(width/2.9,height/2.2)
@@ -809,13 +838,12 @@ class Runner{
 			
 		}else{
 			if(this.injured == false){
-				background("cyan")
-
+				background(Screen)
 				clearButtons()
 				this.setDates()
 				this.setPaces()
 				textSize(20)
-				rect(width/2-width/4,height/2-height/4,width/2,height/2)
+				image(scroll,width/17,height/11,width/1.1,height/1.3)
 				fill("black")
 				text("Fitness: " + this.fitness + "  Speed: " + this.speed + "  Injury: " + this.injury + "  Miles: " + me.miles + "  Improvement Rate: " + this.improvement + "  Name: " + this.name,10,20)
 				textSize(width/50)
@@ -861,7 +889,7 @@ class Runner{
 				// this.AnT.mousePressed(this.AnTre)
 			}
 			if(this.injured == true){
-				background("red")
+				background(b2)
 				clearButtons()
 				this.setDates()
 				this.setPaces()
@@ -870,9 +898,9 @@ class Runner{
 				this.CrossTrain.position(width/2.9,height/2.2 + height*0.2)
 				this.CrossTrain.mousePressed(this.CrossTrainre)
 				textSize(20)
-				rect(width/2-width/4,height/2-height/4,width/2,height/2)
+				image(scroll,width/17,height/11,width/1.1,height/1.3)
 				fill("black")
-				text("Fitness: " + this.fitness + "  Speed: " + this.speed + "  Injury: " + this.injury + "  Miles: " + me.miless + "  Improvement Rate: " + this.improvement + "  Name: " + this.name,10,20)
+				text("Fitness: " + this.fitness + "  Speed: " + this.speed + "  Injury: " + this.injury + "  Miles: " + me.miles + "  Improvement Rate: " + this.improvement + "  Name: " + this.name,10,20)
 				textSize(width/50)
 				text("INJURED!",width/3,height/2.5)
 				textSize(width/25)
