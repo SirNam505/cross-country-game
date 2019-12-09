@@ -811,33 +811,34 @@ class Runner{
 	newDay(){
 		fill("white")
 		this.injuryTest()
-		if (workout[me.dayNum-1][0] == "race"){
-			background(Screen)
+		if(this.injured == true){
+			background(b2)
 			clearButtons()
 			this.setDates()
 			this.setPaces()
+			this.CrossTrain = createButton('Cross Train');
+			this.CrossTrain.id("CrossTrain")
+			this.CrossTrain.position(width/2.9,height/2.2 + height*0.2)
+			this.CrossTrain.mousePressed(this.CrossTrainre)
 			textSize(20)
 			image(scroll,width/17,height/11,width/1.1,height/1.3)
 			fill("black")
 			text("Fitness: " + this.fitness + "  Speed: " + this.speed + "  Injury: " + this.injury + "  Miles: " + me.miles + "  Improvement Rate: " + this.improvement + "  Name: " + this.name,10,20)
 			textSize(width/50)
-			text("RACE: " + workout[me.dayNum-1][1],width/3,height/2.5)
+			text("INJURED!",width/3,height/2.5)
 			textSize(width/25)
 			text("Day #" + me.dayNum, width/2,height/3.3)
 			textSize(width/60)
 			if (me.summer){text("Summer",width/2-width/4+5,height/2-height/4+50)}else{text("Season",width/2-width/4+5,height/2-height/4+50)}
 			text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
-			text(this.fiveKtime,width/1.5 + 5,height/2-height/4+20)
-			fill("white")
-			this.raceName = workout[me.dayNum-1][1]
-			this.race = createButton('RACE');
-			this.race.id("race")
-			this.race.position(width/2.9,height/2.2)
-			this.race.mousePressed(this.raceRe)
-			
-			
+			text("Injured days left: " + this.injuryDays,width/3,height/2.2)
+			this.speed = float((this.speed-0.2).toFixed(3))
+			this.injuryDays = float((this.injuryDays-1).toFixed(0))
+			text("Injury days - 1",width/3,height/1.84)
+			text("Speed - 0.2",width/3,height/2.02)
+
 		}else{
-			if(this.injured == false){
+			if (workout[me.dayNum-1][0] == "race"){
 				background(Screen)
 				clearButtons()
 				this.setDates()
@@ -847,7 +848,7 @@ class Runner{
 				fill("black")
 				text("Fitness: " + this.fitness + "  Speed: " + this.speed + "  Injury: " + this.injury + "  Miles: " + me.miles + "  Improvement Rate: " + this.improvement + "  Name: " + this.name,10,20)
 				textSize(width/50)
-				text("Choose your type of workout:",width/3,height/2.5)
+				text("RACE: " + workout[me.dayNum-1][1],width/3,height/2.5)
 				textSize(width/25)
 				text("Day #" + me.dayNum, width/2,height/3.3)
 				textSize(width/60)
@@ -855,65 +856,63 @@ class Runner{
 				text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
 				text(this.fiveKtime,width/1.5 + 5,height/2-height/4+20)
 				fill("white")
-				this.RecoveryRun = createButton('Recovery Run');
-				this.RecoveryRun.id("RecoveryRun")
-				this.RecoveryRun.position(width/2.9,height/2.2)
-				this.RecoveryRun.mousePressed(this.RecoveryRunre)
+				this.raceName = workout[me.dayNum-1][1]
+				this.race = createButton('RACE');
+				this.race.id("race")
+				this.race.position(width/2.9,height/2.2)
+				this.race.mousePressed(this.raceRe)
+			}else{
+				if(this.injured == false){
+					background(Screen)
+					clearButtons()
+					this.setDates()
+					this.setPaces()
+					textSize(20)
+					image(scroll,width/17,height/11,width/1.1,height/1.3)
+					fill("black")
+					text("Fitness: " + this.fitness + "  Speed: " + this.speed + "  Injury: " + this.injury + "  Miles: " + me.miles + "  Improvement Rate: " + this.improvement + "  Name: " + this.name,10,20)
+					textSize(width/50)
+					text("Choose your type of workout:",width/3,height/2.5)
+					textSize(width/25)
+					text("Day #" + me.dayNum, width/2,height/3.3)
+					textSize(width/60)
+					if (me.summer){text("Summer",width/2-width/4+5,height/2-height/4+50)}else{text("Season",width/2-width/4+5,height/2-height/4+50)}
+					text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
+					text(this.fiveKtime,width/1.5 + 5,height/2-height/4+20)
+					fill("white")
+					this.RecoveryRun = createButton('Recovery Run');
+					this.RecoveryRun.id("RecoveryRun")
+					this.RecoveryRun.position(width/2.9,height/2.2)
+					this.RecoveryRun.mousePressed(this.RecoveryRunre)
 
-				this.LongRun = createButton('Long Run');
-				this.LongRun.id("LongRun")
-				this.LongRun.position(width/2.9,height/2.2 + height*0.05)
-				this.LongRun.mousePressed(this.LongRunre)
+					this.LongRun = createButton('Long Run');
+					this.LongRun.id("LongRun")
+					this.LongRun.position(width/2.9,height/2.2 + height*0.05)
+					this.LongRun.mousePressed(this.LongRunre)
 
-				this.AnT = createButton('AnT');
-				this.AnT.id("AnT")
-				this.AnT.position(width/2.9,height/2.2 + height*0.1)
-				this.AnT.mousePressed(this.AnTre)
+					this.AnT = createButton('AnT');
+					this.AnT.id("AnT")
+					this.AnT.position(width/2.9,height/2.2 + height*0.1)
+					this.AnT.mousePressed(this.AnTre)
 
-				this.AT = createButton('AT');
-				this.AT.id("AT")
-				this.AT.position(width/2.9,height/2.2 + height*0.15)
-				this.AT.mousePressed(this.ATre)
+					this.AT = createButton('AT');
+					this.AT.id("AT")
+					this.AT.position(width/2.9,height/2.2 + height*0.15)
+					this.AT.mousePressed(this.ATre)
 
-				this.Interval = createButton('Interval');
-				this.Interval.id("Interval")
-				this.Interval.position(width/2.9,height/2.2 + height*0.2)
-				this.Interval.mousePressed(this.Intervalre)
+					this.Interval = createButton('Interval');
+					this.Interval.id("Interval")
+					this.Interval.position(width/2.9,height/2.2 + height*0.2)
+					this.Interval.mousePressed(this.Intervalre)
 
-				this.RestDay = createButton('Rest Day');
-				this.RestDay.id("RestDay")
-				this.RestDay.position(width/2.9,height/2.2 + height*0.25)
-				this.RestDay.mousePressed(this.RestDayre)			// this.AnT.mousePressed(this.AT.remove)
-				// this.AnT.mousePressed(this.Interval.remove)
-				// this.AnT.mousePressed(this.LongRun.remove)
-				// this.AnT.mousePressed(this.AnTre)
-			}
-			if(this.injured == true){
-				background(b2)
-				clearButtons()
-				this.setDates()
-				this.setPaces()
-				this.CrossTrain = createButton('Cross Train');
-				this.CrossTrain.id("CrossTrain")
-				this.CrossTrain.position(width/2.9,height/2.2 + height*0.2)
-				this.CrossTrain.mousePressed(this.CrossTrainre)
-				textSize(20)
-				image(scroll,width/17,height/11,width/1.1,height/1.3)
-				fill("black")
-				text("Fitness: " + this.fitness + "  Speed: " + this.speed + "  Injury: " + this.injury + "  Miles: " + me.miles + "  Improvement Rate: " + this.improvement + "  Name: " + this.name,10,20)
-				textSize(width/50)
-				text("INJURED!",width/3,height/2.5)
-				textSize(width/25)
-				text("Day #" + me.dayNum, width/2,height/3.3)
-				textSize(width/60)
-				if (me.summer){text("Summer",width/2-width/4+5,height/2-height/4+50)}else{text("Season",width/2-width/4+5,height/2-height/4+50)}
-				text("Date: " + me.day + ", " + me.month + " " + me.date, width/2-width/4+5,height/2-height/4+20)
-				text("Injured days left: " + this.injuryDays,width/3,height/2.2)
-				this.speed = float((this.speed-0.2).toFixed(3))
-				this.injuryDays = float((this.injuryDays-1).toFixed(0))
-				text("Injury days - 1",width/3,height/1.84)
-				text("Speed - 0.2",width/3,height/2.02)
-
+					this.RestDay = createButton('Rest Day');
+					this.RestDay.id("RestDay")
+					this.RestDay.position(width/2.9,height/2.2 + height*0.25)
+					this.RestDay.mousePressed(this.RestDayre)			// this.AnT.mousePressed(this.AT.remove)
+					// this.AnT.mousePressed(this.Interval.remove)
+					// this.AnT.mousePressed(this.LongRun.remove)
+					// this.AnT.mousePressed(this.AnTre)
+				}
 			}
 		}
 	}
