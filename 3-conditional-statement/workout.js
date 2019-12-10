@@ -145,7 +145,7 @@ workout = [
 	["Recovery Run",40],
 	["AT",30],
 	["Recovery Run",50],
-	["race","BCL 2",3.107],
+	["race","BCL 2", 2.95],
 	["Long Run",75],
 	["REST"],
 	["800m",9],

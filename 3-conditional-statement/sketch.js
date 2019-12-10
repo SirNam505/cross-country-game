@@ -162,7 +162,7 @@ function secondFunction(){
 function setup(){
 	textFont('Kalam');
 	var NAME;
-	createCanvas(1000,700)
+	createCanvas(1000,screen.height - 120)
 	background("cyan")
 	secondFunction()
 }
