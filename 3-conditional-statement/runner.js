@@ -1,4 +1,16 @@
+function noUndefined(list){
+	let list2 = list
 
+	for(var i = 0; i<list.length; i++){
+
+		if (list[i][0] == undefined){
+
+			list2.splice(i)
+
+		}
+	}
+	return list2
+}
 
 class Runner{
 	constructor(fitness,speed,injury,name){
@@ -16,21 +28,76 @@ class Runner{
 		this.name = name
 		this.improvement = float((1.1 - (this.speed+this.fitness)/100).toFixed(2))
 		firebase.database().ref("users").once('value',this.getName)
-
+		firebase.database().ref('highscores/'+this.name).set({
+			username:this.name
+		})
+		
+		
 		// this.newDay()
 	}
+	highscore(snapshot){
+		let scores = []
+		if (me.currentRace == "Lake Merced Race"){
+		snapshot.forEach(userSnapshot => {
+			scores.push([userSnapshot.val().LakeMercedRace,userSnapshot.val().username])
+		})
+		}
+
+		if (me.currentRace == "1600 Time Trial"){
+			snapshot.forEach(userSnapshot => {
+				scores.push([userSnapshot.val().TimeTrial1600,userSnapshot.val().username])
+			})
+		}
+
+		if (me.currentRace == "Viking Opener Invitational"){
+			snapshot.forEach(userSnapshot => {
+				scores.push([userSnapshot.val().VikingOpenerInvitational,userSnapshot.val().username])
+			})
+		}
+
+		if (me.currentRace == "NCS/Farmer Course"){
+			snapshot.forEach(userSnapshot => {
+				scores.push([userSnapshot.val().NCSFarmerCourse,userSnapshot.val().username])
+			})
+		}
+		if (me.currentRace == "BCL 1 Marin Course"){
+			snapshot.forEach(userSnapshot => {
+				scores.push([userSnapshot.val().BCL1MarinCourse,userSnapshot.val().username])
+			})
+		}
+		if (me.currentRace == "BCL Championship Course"){
+			snapshot.forEach(userSnapshot => {
+				scores.push([userSnapshot.val().BCLChampionshipCourse,userSnapshot.val().username])
+			})
+		}
+		if (me.currentRace == "Home Course"){
+			snapshot.forEach(userSnapshot => {
+				scores.push([userSnapshot.val().HomeCourse,userSnapshot.val().username])
+			})
+		}
+		if (me.currentRace == "State Championship Course"){
+			snapshot.forEach(userSnapshot => {
+				scores.push([userSnapshot.val().StateChampionshipCourse,userSnapshot.val().username])
+			})
+		}
+
+		let realScores = noUndefined(scores)
+		realScores.sort()
+		console.log(realScores)
+		let name = realScores[0][1]
+		let score = realScores[0][0]
+		text(me.currentRace + " highscore: " + score + " by " + name,width/4 + 10,height/2.5+165)
+	}
+
 
 	getName(snapshot){
 		var same = false
 		snapshot.forEach(userSnapshot => {
 			var name = userSnapshot.val().username
-			console.log(me.name)
-			console.log(name)
 			if(me.name == name){
 				same = true
 			}
 		})
-		console.log(same)
 		if (same){
 			me.fitness = snapshot.child(me.name).val().fitness
 			me.dayNum = snapshot.child(me.name).val().dayNum
@@ -59,7 +126,7 @@ class Runner{
 				injuryDays: this.injuryDays,
 				miles: this.miles,
 				improvement: this.improvement
-			  });
+			});
 		}
 		wait = true
 	}
@@ -87,7 +154,7 @@ class Runner{
 			injuryDays: this.injuryDays,
 			miles: this.miles,
 			improvement: this.improvement
-		  });
+		});
 	}
 	setDates(){
 		if (this.dayNum % 7 == 1){
@@ -774,16 +841,67 @@ class Runner{
 		me.previous +=1
 		clearButtons()
 		textSize(width/50)
+		if (workout[me.dayNum-1][1] == "1600 Time Trial"){
+			this.currentRace = "1600 Time Trial"
+			firebase.database().ref('highscores/'+me.name).update({
+				TimeTrial1600:me.raceTime
+			})
+		}
+		if (workout[me.dayNum-1][1] == "Lake Merced Race"){
+			this.currentRace = "Lake Merced Race"
+			firebase.database().ref('highscores/'+me.name).update({
+				"LakeMercedRace":me.raceTime
+			})
+		}
+		if (workout[me.dayNum-1][1] == "Viking Opener Invitational"){
+			this.currentRace = "Viking Opener Invitational"
+			firebase.database().ref('highscores/'+me.name).update({
+				"VikingOpenerInvitational":me.raceTime
+			})
+		}
+		if (workout[me.dayNum-1][1] == "Farmer's Invitational" || workout[me.dayNum-1][1] == "NCS Championship"){
+			this.currentRace = "NCS/Farmer Course"
+			firebase.database().ref('highscores/'+me.name).update({
+				"NCSFarmerCourse":me.raceTime
+			})
+		}
+		if (workout[me.dayNum-1][1] == "BCL 1"){
+			this.currentRace = "BCL 1 Marin Course"
+			firebase.database().ref('highscores/'+me.name).update({
+				"BCL1MarinCourse":me.raceTime
+			})
+		}
+		if (workout[me.dayNum-1][1] == "Jim Tracy Challenge" || workout[me.dayNum-1][1] == "BCL West Championship"){
+			this.currentRace ="BCL Championship Course"
+			firebase.database().ref('highscores/'+me.name).update({
+				"BCLChampionshipCourse":me.raceTime
+			})
+		}
+		if (workout[me.dayNum-1][1] == "Home Course Time Trial" || workout[me.dayNum-1][1] == "BCL 2"){
+			this.currentRace = "Home Course"
+			firebase.database().ref('highscores/'+me.name).update({
+				"HomeCourse":me.raceTime
+			})
+		}
+		if (workout[me.dayNum-1][1] == "State Championship"){
+			this.currentRace ="State Championship Course"
+			firebase.database().ref('highscores/'+me.name).update({
+				"StateChampionshipCourse":me.raceTime
+			})
+		}
+
+		firebase.database().ref("highscores").once('value',this.highscore)
+		
 		text("You ran " + workout[me.dayNum-1][2] + ' mile(s) in '+ me.raceTime,width/4+10,height/2.5)
-		text('At the ' + workout[me.dayNum-1][1],width/4+10,height/2.5+40)
-		text("Fitness + " + (0.5*me.improvement).toFixed(3),width/3,height/2)
+		text('At the ' + workout[me.dayNum-1][1],width/4+10,height/2.5+30)
+		text("Fitness + " + (0.5*me.improvement).toFixed(3),width/3,height/2.5+60)
 		me.fitness = float((me.fitness+1*me.improvement/10).toFixed(3))
 		let injury = 2
-		text("Injury + " + injury,width/3,height/2+25)
+		text("Injury + " + injury,width/3,height/2.5+85)
 		me.injury = float((me.injury+injury).toFixed(2))
-		text("Speed + 1",width/3,height/2+50)
+		text("Speed + 1",width/3,height/2.5+110)
 		me.speed = float((me.speed+1).toFixed(2))
-		text("Improvement Rate + 0.02",width/3,height/2+75)
+		text("Improvement Rate + 0.02",width/3,height/2.5+135)
 		me.improvement = float((me.improvement+0.02).toFixed(2))
 		me.miles = float((me.miles + (workout[me.dayNum-1][2]+2)).toFixed(3))
 		let next = createButton('Next >>');
